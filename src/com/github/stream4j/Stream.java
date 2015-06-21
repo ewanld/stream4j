@@ -100,7 +100,7 @@ public class Stream<T> {
 		return findFirst();
 	}
 
-	public <R> Stream<R> map(final Function<T, R> transformer) {
+	public <R> Stream<R> map(final Function<? super T, ? extends R> transformer) {
 		final TransformIterator<T, R> it = new TransformIterator<T, R>(iterator, transformer);
 		final Stream<R> res = new Stream<R>(it);
 		return res;
@@ -118,12 +118,12 @@ public class Stream<T> {
 		return size != SIZE_UNKNOWN ? size : 10;
 	}
 
-	public Stream<T> filter(Predicate<T> predicate) {
+	public Stream<T> filter(Predicate<? super T> predicate) {
 		final FilterableIterator<T> it = new FilterableIterator<T>(iterator, predicate);
 		return new Stream<T>(it);
 	}
 
-	public <K> Map<K, T> toMap(Function<T, K> toKey) {
+	public <K> Map<K, T> toMap(Function<? super T, ? extends K> toKey) {
 		final Map<K, T> res = new HashMap<K, T>();
 		while (iterator.hasNext()) {
 			final T t = iterator.next();
@@ -139,7 +139,7 @@ public class Stream<T> {
 		}
 	}
 
-	public void partitionBy(Predicate<T> predicate, Collection<T> matched, Collection<T> notMatched) {
+	public void partitionBy(Predicate<? super T> predicate, Collection<? super T> matched, Collection<? super T> notMatched) {
 		while (iterator.hasNext()) {
 			final T t = iterator.next();
 			if (predicate.test(t)) {
@@ -150,7 +150,7 @@ public class Stream<T> {
 		}
 	}
 
-	public <K> Map<K, List<T>> groupBy(Function<T, K> classifier) {
+	public <K> Map<K, List<T>> groupBy(Function<? super T, ? extends K> classifier) {
 		final Map<K, List<T>> res = new HashMap<K, List<T>>();
 		while (iterator.hasNext()) {
 			final T t = iterator.next();
@@ -242,10 +242,10 @@ public class Stream<T> {
 	}
 
 	private static class TransformIterator<T, R> implements Iterator<R> {
-		private final Function<T, R> transformer;
+		private final Function<? super T, ? extends R> transformer;
 		private final Iterator<? extends T> wrapped;
 
-		private TransformIterator(Iterator<? extends T> wrapped, Function<T, R> transformer) {
+		private TransformIterator(Iterator<? extends T> wrapped, Function<? super T, ? extends R> transformer) {
 			assert wrapped != null;
 			assert transformer != null;
 
@@ -271,10 +271,10 @@ public class Stream<T> {
 
 	private static class FilterableIterator<T> implements Iterator<T> {
 		private final Iterator<? extends T> wrapped;
-		private final Predicate<T> predicate;
+		private final Predicate<? super T> predicate;
 		private T nextItem;
 
-		public FilterableIterator(Iterator<? extends T> wrapped, Predicate<T> predicate) {
+		public FilterableIterator(Iterator<? extends T> wrapped, Predicate<? super T> predicate) {
 			assert wrapped != null;
 			assert predicate != null;
 
