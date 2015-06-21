@@ -180,6 +180,8 @@ public class Stream<T> {
 		}
 
 		@Override
-		public void remove() {}
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
 	}
 }
