@@ -8,21 +8,22 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class Stream<T> {
-	private final Iterator<T> iterator;
+	private final Iterator<? extends T> iterator;
 	private final int size;
 	private final static int SIZE_UNKNOWN = -1;
 
-	public Stream(Collection<T> wrapped) {
+	public Stream(Collection<? extends T> wrapped) {
 		this(wrapped.iterator(), wrapped.size());
 	}
 
-	public Stream(Iterator<T> iterator) {
+	public Stream(Iterator<? extends T> iterator) {
 		this(iterator, SIZE_UNKNOWN);
 	}
 
-	private Stream(Iterator<T> iterator, int size) {
+	private Stream(Iterator<? extends T> iterator, int size) {
 		this.iterator = iterator;
 		this.size = size;
 	}
@@ -186,11 +187,68 @@ public class Stream<T> {
 		return res;
 	}
 
+	public <R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper) {
+		final List<Iterator<? extends R>> iterators = new ArrayList<Iterator<? extends R>>(getCapacityHint());
+		int size = 0;
+		while (iterator.hasNext()) {
+			final T t = iterator.next();
+			Stream<? extends R> mapped = mapper.apply(t);
+			size = mapped.size == SIZE_UNKNOWN ? SIZE_UNKNOWN : size + mapped.size;
+			iterators.add(mapped.iterator);
+		}
+		final Iterator<? extends R> compositeIterator = new CompositeIterator<R>(iterators);
+		return new Stream<R>(compositeIterator, size);
+	}
+
+	private static class CompositeIterator<T> implements Iterator<T> {
+		private final List<Iterator<? extends T>> iterators;
+		private int index = 0;
+
+		public CompositeIterator(List<Iterator<? extends T>> iterators) {
+			assert iterators != null;
+			this.iterators = iterators;
+		}
+
+		@Override
+		public boolean hasNext() {
+			if (iterators.size() == 0)
+				return false;
+			boolean res = iterators.get(index).hasNext();
+			if (!res && index < iterators.size() - 1)
+				res = iterators.get(++index).hasNext();
+			return res;
+		}
+
+		@Override
+		public T next() {
+			if (iterators.size() == 0)
+				throw new NoSuchElementException();
+			while (true) {
+				if (iterators.get(index).hasNext()) {
+					return iterators.get(index).next();
+				} else if (index < iterators.size() - 1) {
+					++index;
+				} else {
+					throw new NoSuchElementException();
+				}
+			}
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+
+	}
+
 	private static class TransformIterator<T, R> implements Iterator<R> {
 		private final Function<T, R> transformer;
-		private final Iterator<T> wrapped;
+		private final Iterator<? extends T> wrapped;
 
-		private TransformIterator(Iterator<T> wrapped, Function<T, R> transformer) {
+		private TransformIterator(Iterator<? extends T> wrapped, Function<T, R> transformer) {
+			assert wrapped != null;
+			assert transformer != null;
+
 			this.wrapped = wrapped;
 			this.transformer = transformer;
 		}
@@ -212,11 +270,14 @@ public class Stream<T> {
 	}
 
 	private static class FilterableIterator<T> implements Iterator<T> {
-		private final Iterator<T> wrapped;
+		private final Iterator<? extends T> wrapped;
 		private final Predicate<T> predicate;
 		private T nextItem;
 
-		public FilterableIterator(Iterator<T> wrapped, Predicate<T> predicate) {
+		public FilterableIterator(Iterator<? extends T> wrapped, Predicate<T> predicate) {
+			assert wrapped != null;
+			assert predicate != null;
+
 			this.wrapped = wrapped;
 			this.predicate = predicate;
 		}
