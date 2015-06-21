@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 
 public class Stream<T> {
 	private final Iterator<? extends T> iterator;
-	private final int size;
+	private final long size;
 	private final static int SIZE_UNKNOWN = -1;
 
 	public Stream(Collection<? extends T> wrapped) {
@@ -23,7 +23,7 @@ public class Stream<T> {
 		this(iterator, SIZE_UNKNOWN);
 	}
 
-	private Stream(Iterator<? extends T> iterator, int size) {
+	private Stream(Iterator<? extends T> iterator, long size) {
 		this.iterator = iterator;
 		this.size = size;
 	}
@@ -115,7 +115,7 @@ public class Stream<T> {
 	}
 
 	private int getCapacityHint() {
-		return size != SIZE_UNKNOWN ? size : 10;
+		return size != SIZE_UNKNOWN ? (int) size : 10;
 	}
 
 	public Stream<T> filter(Predicate<? super T> predicate) {
@@ -189,7 +189,7 @@ public class Stream<T> {
 
 	public <R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper) {
 		final List<Iterator<? extends R>> iterators = new ArrayList<Iterator<? extends R>>(getCapacityHint());
-		int size = 0;
+		long size = 0;
 		while (iterator.hasNext()) {
 			final T t = iterator.next();
 			Stream<? extends R> mapped = mapper.apply(t);
@@ -198,6 +198,17 @@ public class Stream<T> {
 		}
 		final Iterator<? extends R> compositeIterator = new CompositeIterator<R>(iterators);
 		return new Stream<R>(compositeIterator, size);
+	}
+
+	public Stream<T> limit(long maxSize) {
+		if (maxSize < 0)
+			throw new IllegalArgumentException("maxSize must be positive");
+		if (size != SIZE_UNKNOWN && size <= maxSize) {
+			return this;
+		} else {
+			long newSize = size == SIZE_UNKNOWN ? SIZE_UNKNOWN : maxSize;
+			return new Stream<T>(new LimitIterator<T>(iterator, maxSize), newSize);
+		}
 	}
 
 	private static class CompositeIterator<T> implements Iterator<T> {
@@ -309,5 +320,38 @@ public class Stream<T> {
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
+	}
+
+	private static class LimitIterator<T> implements Iterator<T> {
+
+		private final long maxSize;
+		private int count = 0;
+		private final Iterator<? extends T> wrapped;
+
+		public LimitIterator(Iterator<? extends T> wrapped, long maxSize) {
+			assert wrapped != null;
+
+			this.wrapped = wrapped;
+			this.maxSize = maxSize;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return count >= maxSize ? false : wrapped.hasNext();
+		}
+
+		@Override
+		public T next() {
+			if (count >= maxSize)
+				throw new NoSuchElementException();
+			count++;
+			return wrapped.next();
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+
 	}
 }
