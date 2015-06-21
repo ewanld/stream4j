@@ -211,6 +211,16 @@ public class Stream<T> {
 		}
 	}
 
+	public Stream<T> skip(long n) {
+		if (n < 0)
+			throw new IllegalArgumentException("maxSize must be positive");
+		int i = 0;
+		while (i++ < n && iterator.hasNext()) {
+			iterator.next();
+		}
+		return this;
+	}
+
 	private static class CompositeIterator<T> implements Iterator<T> {
 		private final List<Iterator<? extends T>> iterators;
 		private int index = 0;
