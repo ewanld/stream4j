@@ -34,6 +34,71 @@ public class Stream<T> {
 		return new Stream<T>(Arrays.asList(items));
 	}
 
+	/**
+	 * Returns whether all elements of this stream match the provided predicate.
+	 * May not evaluate the predicate on all elements if not necessary for
+	 * determining the result. If the stream is empty then true is returned and
+	 * the predicate is not evaluated. <br>
+	 * This is a short-circuiting terminal operation.
+	 * 
+	 * @param predicate
+	 *            a non-interfering, stateless predicate to apply to elements of
+	 *            this stream.
+	 * @return true if either all elements of the stream match the provided
+	 *         predicate or the stream is empty, otherwise false.
+	 */
+	public boolean allMatch(Predicate<? super T> predicate) {
+		while (iterator.hasNext()) {
+			final T t = iterator.next();
+			if (!predicate.test(t)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean anyMatch(Predicate<? super T> predicate) {
+		while (iterator.hasNext()) {
+			final T t = iterator.next();
+			if (predicate.test(t)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns the count of elements in this stream.
+	 */
+	public long count() {
+		if (size != SIZE_UNKNOWN)
+			return size;
+		long res = 0;
+		while (iterator.hasNext()) {
+			iterator.next();
+			res++;
+		}
+		return res;
+	}
+
+	public boolean noneMatch(Predicate<? super T> predicate) {
+		while (iterator.hasNext()) {
+			final T t = iterator.next();
+			if (predicate.test(t)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public T findFirst() {
+		return iterator.hasNext() ? iterator.next() : null;
+	}
+
+	public T findAny() {
+		return findFirst();
+	}
+
 	public <R> Stream<R> map(final Function<T, R> transformer) {
 		final TransformIterator<T, R> it = new TransformIterator<T, R>(iterator, transformer);
 		final Stream<R> res = new Stream<R>(it);
