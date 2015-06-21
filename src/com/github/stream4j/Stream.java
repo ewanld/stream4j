@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Stream<T> {
-	private final Iterator<T>	iterator;
-	private final int			size;
-	private final static int	SIZE_UNKNOWN	= -1;
+	private final Iterator<T> iterator;
+	private final int size;
+	private final static int SIZE_UNKNOWN = -1;
 
 	public Stream(Collection<T> wrapped) {
 		this(wrapped.iterator(), wrapped.size());
@@ -41,7 +41,7 @@ public class Stream<T> {
 	}
 
 	public List<T> toList() {
-		List<T> res = new ArrayList<T>(getCapacityHint());
+		final List<T> res = new ArrayList<T>(getCapacityHint());
 		while (iterator.hasNext()) {
 			res.add(iterator.next());
 		}
@@ -58,9 +58,9 @@ public class Stream<T> {
 	}
 
 	public <K> Map<K, T> toMap(Function<T, K> toKey) {
-		Map<K, T> res = new HashMap<K, T>();
+		final Map<K, T> res = new HashMap<K, T>();
 		while (iterator.hasNext()) {
-			T t = iterator.next();
+			final T t = iterator.next();
 			res.put(toKey.apply(t), t);
 		}
 		return res;
@@ -68,14 +68,14 @@ public class Stream<T> {
 
 	public void forEach(Consumer<? super T> action) {
 		while (iterator.hasNext()) {
-			T t = iterator.next();
+			final T t = iterator.next();
 			action.accept(t);
 		}
 	}
 
 	public void partitionBy(Predicate<T> predicate, Collection<T> matched, Collection<T> notMatched) {
 		while (iterator.hasNext()) {
-			T t = iterator.next();
+			final T t = iterator.next();
 			if (predicate.test(t)) {
 				matched.add(t);
 			} else {
@@ -85,10 +85,10 @@ public class Stream<T> {
 	}
 
 	public <K> Map<K, List<T>> groupBy(Function<T, K> classifier) {
-		Map<K, List<T>> res = new HashMap<K, List<T>>();
+		final Map<K, List<T>> res = new HashMap<K, List<T>>();
 		while (iterator.hasNext()) {
-			T t = iterator.next();
-			K key = classifier.apply(t);
+			final T t = iterator.next();
+			final K key = classifier.apply(t);
 			List<T> l = res.get(key);
 			if (l == null) {
 				l = new ArrayList<T>();
@@ -102,7 +102,7 @@ public class Stream<T> {
 	public T max(Comparator<? super T> comparator) {
 		T res = null;
 		while (iterator.hasNext()) {
-			T t = iterator.next();
+			final T t = iterator.next();
 			if (res == null || comparator.compare(t, res) > 0) {
 				res = t;
 			}
@@ -113,7 +113,7 @@ public class Stream<T> {
 	public T min(Comparator<? super T> comparator) {
 		T res = null;
 		while (iterator.hasNext()) {
-			T t = iterator.next();
+			final T t = iterator.next();
 			if (res == null || comparator.compare(t, res) < 0) {
 				res = t;
 			}
@@ -122,8 +122,8 @@ public class Stream<T> {
 	}
 
 	private static class TransformIterator<T, R> implements Iterator<R> {
-		private final Function<T, R>	transformer;
-		private final Iterator<T>		wrapped;
+		private final Function<T, R> transformer;
+		private final Iterator<T> wrapped;
 
 		private TransformIterator(Iterator<T> wrapped, Function<T, R> transformer) {
 			this.wrapped = wrapped;
@@ -147,9 +147,9 @@ public class Stream<T> {
 	}
 
 	private static class FilterableIterator<T> implements Iterator<T> {
-		private final Iterator<T>	wrapped;
-		private final Predicate<T>	predicate;
-		private T					nextItem;
+		private final Iterator<T> wrapped;
+		private final Predicate<T> predicate;
+		private T nextItem;
 
 		public FilterableIterator(Iterator<T> wrapped, Predicate<T> predicate) {
 			this.wrapped = wrapped;
@@ -169,7 +169,7 @@ public class Stream<T> {
 			return res;
 		}
 
-		public T findNext() {
+		private T findNext() {
 			while (wrapped.hasNext()) {
 				final T curr = wrapped.next();
 				if (predicate.test(curr)) {
