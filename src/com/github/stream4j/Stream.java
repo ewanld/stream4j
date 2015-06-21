@@ -3,6 +3,7 @@ package com.github.stream4j;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -219,6 +220,13 @@ public class Stream<T> {
 			iterator.next();
 		}
 		return this;
+	}
+
+	public Stream<T> sorted(Comparator<? super T> comparator) {
+		final List<T> list = toList();
+		Collections.sort(list, comparator);
+		final Stream<T> res = new Stream<T>(list);
+		return res;
 	}
 
 	private static class CompositeIterator<T> implements Iterator<T> {
