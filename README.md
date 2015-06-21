@@ -24,6 +24,6 @@ Coming soon.
 
 ## Design rationale
 * The design mimics the ```java.util.function``` package, so when you migrate to JDK8 you can switch to this package with ease.
-* This library is fully KISS/YAGNI-compliant (< 300 lines of code). You can read the whole source code in 5-10 minutes.
+* This library is fully KISS/YAGNI-compliant (< 400 lines of code). You can read the whole source code in less than 10 minutes.
 * It does not try to be theoretically elegant or full-featured, but focuses on being simple and practical.
 * The more complex parts of the Stream API, like Collectors for instance, have been left out. Some collectors are implemented directly in the Stream class (check out ```groupBy```, ```partitionBy``` and ```toMap```).
