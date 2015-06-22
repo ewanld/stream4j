@@ -20,10 +20,22 @@ You may have noticed the weird formatting of the ```stringifyInt``` and ```gt2``
 This example uses ```@formatter``` directives used by Eclipse to disable formatting (they must be enabled in the Java formatter settings, tab "Off/on tags"); adapt to your favorite formatter (if your formatter doesn't have on/off directives, change formatter. Seriously.)
 
 ## Examples
-Coming soon.
+```java
+Stream.of(3, 2, 1, 4).filter(gt2); //[3, 4]
+Stream.of(3, 2).allMatch(gt2);     //true
+Stream.of(3, 2, 1).allMatch(gt2);  //false
+Stream.of(3, 2, 1).anyMatch(gt2);  //true
+Stream.of(3, 2, 1).count();        //3
+Stream.of(2, 1).findFirst();        //2
+Stream.of(3, 1).toMap(stringfyInt); //{ "the number 3": 3, "the number 1": 1 }
+Stream.of(3,2,1).partitionBy(gt2, list1, list2);  //list1=[3], list2=[2, 1]
+```
+
+## Build from source
+Execute ```ant``` from the project root directory . A file ```dist/stream4j.jar``` is  created. 
 
 ## Design rationale
 * The design mimics the ```java.util.function``` package, so when you migrate to JDK8 you can switch to this package with ease.
-* This library is fully KISS/YAGNI-compliant (< 300 lines of code). You can read the whole source code in 5-10 minutes.
+* This library is fully KISS/YAGNI-compliant (< 400 lines of code). You can read the whole source code in less than 10 minutes.
 * It does not try to be theoretically elegant or full-featured, but focuses on being simple and practical.
 * The more complex parts of the Stream API, like Collectors for instance, have been left out. Some collectors are implemented directly in the Stream class (check out ```groupBy```, ```partitionBy``` and ```toMap```).
