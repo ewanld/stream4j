@@ -229,6 +229,22 @@ public class Stream<T> {
 		return res;
 	}
 
+	public Stream<T> sorted() {
+		return sorted(createComparator());
+	}
+
+	private Comparator<T> createComparator() {
+		return new Comparator<T>() {
+
+			@Override
+			public int compare(T o1, T o2) {
+				@SuppressWarnings("unchecked")
+				Comparable<T> c1 = (Comparable<T>) o1;
+				return c1.compareTo(o2);
+			}
+		};
+	}
+
 	private static class CompositeIterator<T> implements Iterator<T> {
 		private final List<Iterator<? extends T>> iterators;
 		private int index = 0;
