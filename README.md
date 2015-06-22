@@ -21,14 +21,15 @@ This example uses ```@formatter``` directives used by Eclipse to disable formatt
 
 ## Examples
 ```java
-Stream.of(3, 2, 1, 4).filter(gt2); //[3, 4]
-Stream.of(3, 2).allMatch(gt2);     //true
-Stream.of(3, 2, 1).allMatch(gt2);  //false
-Stream.of(3, 2, 1).anyMatch(gt2);  //true
-Stream.of(3, 2, 1).count();        //3
+Stream.of(3, 2, 1, 4).filter(gt2);  //[3, 4]
+Stream.of(3, 2).allMatch(gt2);      //true
+Stream.of(3, 2, 1).allMatch(gt2);   //false
+Stream.of(3, 2, 1).anyMatch(gt2);   //true
+Stream.of(3, 2, 1).count();         //3
 Stream.of(2, 1).findFirst();        //2
 Stream.of(3, 1).toMap(stringfyInt); //{ "the number 3": 3, "the number 1": 1 }
-Stream.of(3,2,1).partitionBy(gt2, list1, list2);  //list1=[3], list2=[2, 1]
+Stream.of(3, 2, 1).partitionBy(gt2, list1, list2);  //list1=[3], list2=[2, 1]
+Stream.of(3, 2, 1).sorted();        //[1, 2, 3]
 ```
 
 ## Build from source
