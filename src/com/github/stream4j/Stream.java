@@ -190,15 +190,15 @@ public class Stream<T> {
 
 	public <R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper) {
 		final List<Iterator<? extends R>> iterators = new ArrayList<Iterator<? extends R>>(getCapacityHint());
-		long size = 0;
+		long totalSize = 0;
 		while (iterator.hasNext()) {
 			final T t = iterator.next();
 			Stream<? extends R> mapped = mapper.apply(t);
-			size = mapped.size == SIZE_UNKNOWN ? SIZE_UNKNOWN : size + mapped.size;
+			totalSize = mapped.size == SIZE_UNKNOWN ? SIZE_UNKNOWN : totalSize + mapped.size;
 			iterators.add(mapped.iterator);
 		}
 		final Iterator<? extends R> compositeIterator = new CompositeIterator<R>(iterators);
-		return new Stream<R>(compositeIterator, size);
+		return new Stream<R>(compositeIterator, totalSize);
 	}
 
 	public Stream<T> limit(long maxSize) {
