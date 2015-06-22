@@ -22,6 +22,9 @@ This example uses ```@formatter``` directives used by Eclipse to disable formatt
 ## Examples
 Coming soon.
 
+## build from source
+Execute ```ant``` from the project root directory . A file ```dist/stream4j.jar``` is  created. 
+
 ## Design rationale
 * The design mimics the ```java.util.function``` package, so when you migrate to JDK8 you can switch to this package with ease.
 * This library is fully KISS/YAGNI-compliant (< 400 lines of code). You can read the whole source code in less than 10 minutes.
