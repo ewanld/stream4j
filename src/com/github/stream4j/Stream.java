@@ -37,6 +37,20 @@ public class Stream<T> {
 	}
 
 	/**
+	 * Convenience method
+	 */
+	public static <T> Stream<T> of(Collection<? extends T> wrapped) {
+		return new Stream<T>(wrapped);
+	}
+	
+	/**
+	 * Convenience method
+	 */
+	public static <T> Stream<T> of(Iterator<? extends T> wrapped) {
+		return new Stream<T>(wrapped);
+	}
+	
+	/**
 	 * Returns whether all elements of this stream match the provided predicate.
 	 * May not evaluate the predicate on all elements if not necessary for
 	 * determining the result. If the stream is empty then true is returned and
@@ -58,7 +72,7 @@ public class Stream<T> {
 		}
 		return true;
 	}
-
+	
 	public boolean anyMatch(Predicate<? super T> predicate) {
 		while (iterator.hasNext()) {
 			final T t = iterator.next();
