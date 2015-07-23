@@ -191,7 +191,7 @@ public class Stream<T> {
 	/**
 	 * Not part of the Java Stream API.
 	 */
-	public <K> Map<K, T> toSortedMap(Function<? super T, ? extends K> toKey) {
+	public <K> SortedMap<K, T> toSortedMap(Function<? super T, ? extends K> toKey) {
 		final SortedMap<K, T> res = new TreeMap<K, T>();
 		toMap(toKey, res);
 		return res;
