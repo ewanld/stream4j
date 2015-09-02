@@ -1,11 +1,14 @@
 package com.github.stream4j;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class TestStream {
-	private static final ArrayList<Integer> emptyList = new ArrayList<Integer>();
-	private static  final Predicate<Integer> gt2 = new Predicate<Integer>() {
+	private static final List<Integer> emptyList = Collections.<Integer> emptyList();
+	private static final Predicate<Integer> gt2 = new Predicate<Integer>() {
 
 		@Override
 		public boolean test(Integer t) {
@@ -13,7 +16,7 @@ public class TestStream {
 		}
 	};
 
-	public  void testAll() {
+	public void testAll() {
 		allMatch();
 		anyMatch();
 		count();
@@ -36,7 +39,7 @@ public class TestStream {
 		toMap();
 		toSortedMap();
 	}
-	
+
 	private void allMatch() {
 		assert Stream.of(emptyList).allMatch(gt2);
 		assert Stream.of(emptyList.iterator()).allMatch(gt2);
@@ -68,15 +71,51 @@ public class TestStream {
 	}
 
 	private void findAny() {
-
+		assert Stream.of(emptyList).findAny() == null;
+		assert Stream.of(1, 2, 3).findAny() == 1;
 	}
 
 	private void findFirst() {
-		//TODO
+		assert Stream.of(emptyList).findFirst() == null;
+		assert Stream.of(1, 2, 3).findFirst() == 1;
 	}
 
+	private static class Employee {
+		private final Set<String> roles;
+
+		public Employee(String... roles) {
+			this.roles = new HashSet<String>(Arrays.asList(roles));
+		}
+
+		public Set<String> getRoles() {
+			return roles;
+		}
+	}
+
+	/**
+	 * Returns a stream representing the roles of the employees, or null if the employee has no roles.
+	 */
+	private static final Function<Employee, Stream<String>> getRoles = new Function<Employee, Stream<String>>() {
+
+		@Override
+		public Stream<String> apply(Employee t) {
+			Set<String> roles = t.getRoles();
+			return roles.size() == 0 ? null : Stream.of(roles);
+		}
+	};
+
 	private void flatMap() {
-		//TODO
+		final List<Employee> noEmployees = Collections.<Employee> emptyList();
+		final List<String> noRoles = Collections.<String> emptyList();
+		assert Stream.of(noEmployees).flatMap(getRoles).toList().equals(noRoles);
+
+		final Employee emp1 = new Employee("role1", "role2");
+		final Employee emp2 = new Employee("role3");
+		final Employee emp3 = new Employee();
+		final Set<String> actual = new HashSet<String>(Stream.of(emp1, emp2, emp3).flatMap(getRoles).toList());
+		final HashSet<String> expected = new HashSet<String>(Arrays.asList("role1", "role2", "role3"));
+		assert actual.equals(expected);
+
 	}
 
 	private void forEach() {
