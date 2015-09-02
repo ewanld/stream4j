@@ -13,6 +13,9 @@ import java.util.NoSuchElementException;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+/**
+ * @param <T> the type of the stream elements
+ */
 public class Stream<T> {
 	private final Iterator<? extends T> iterator;
 	private final long size;
@@ -162,7 +165,7 @@ public class Stream<T> {
 		}
 		return res;
 	}
-
+	
 	private int getCapacityHint() {
 		return size != SIZE_UNKNOWN ? (int) size : 10;
 	}
