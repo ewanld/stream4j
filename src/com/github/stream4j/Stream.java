@@ -130,6 +130,8 @@ public class Stream<T> {
 	}
 
 	/**
+	 * Return the first element of this stream, or null if the stream is empty.<br>
+	 * This is a short-circuiting terminal operation.<br>
 	 * Not part of the Java Stream API.
 	 */
 	public T findFirst() {
@@ -137,6 +139,8 @@ public class Stream<T> {
 	}
 
 	/**
+	 * Return the first element of this stream, or null if the stream is empty.<br>
+	 * This is a short-circuiting terminal operation.<br>
 	 * Not part of the Java Stream API.
 	 */
 	public T findAny() {
@@ -165,7 +169,7 @@ public class Stream<T> {
 		}
 		return res;
 	}
-	
+
 	private int getCapacityHint() {
 		return size != SIZE_UNKNOWN ? (int) size : 10;
 	}
@@ -307,6 +311,7 @@ public class Stream<T> {
 		while (iterator.hasNext()) {
 			final T t = iterator.next();
 			Stream<? extends R> mapped = mapper.apply(t);
+			if (mapped == null) mapped = Stream.of(Collections.<R> emptyList());
 			totalSize = mapped.size == SIZE_UNKNOWN ? SIZE_UNKNOWN : totalSize + mapped.size;
 			iterators.add(mapped.iterator);
 		}
