@@ -3,8 +3,10 @@ package com.github.stream4j;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class TestStream {
@@ -149,8 +151,28 @@ public class TestStream {
 		}
 	}
 
+	private static final Function<String, Character> firstChar = new Function<String, Character>() {
+
+		@Override
+		public Character apply(String t) {
+			return t.charAt(0);
+		}
+
+	};
+
 	private void groupBy() {
-		//TODO
+		{
+			final Map<Character, List<String>> actual = Stream.of(Collections.<String> emptyList())
+					.groupBy(firstChar);
+			assert actual.equals(Collections.<String, Character> emptyMap());
+		}
+		{
+			final Map<Character, List<String>> actual = Stream.of("ab", "ac", "bb").groupBy(firstChar);
+			final Map<Character, List<String>> expected = new HashMap<Character, List<String>>();
+			expected.put('a', Arrays.asList("ab", "ac"));
+			expected.put('b', Arrays.asList("bb"));
+			assert actual.equals(expected);
+		}
 	}
 
 	private void limit() {
