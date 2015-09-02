@@ -1,5 +1,6 @@
 package com.github.stream4j;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -99,7 +100,7 @@ public class TestStream {
 
 		@Override
 		public Stream<String> apply(Employee t) {
-			Set<String> roles = t.getRoles();
+			final Set<String> roles = t.getRoles();
 			return roles.size() == 0 ? null : Stream.of(roles);
 		}
 	};
@@ -118,8 +119,34 @@ public class TestStream {
 
 	}
 
+	private static class Add extends Consumer<Integer> {
+		private final List<Integer> list;
+
+		public Add(List<Integer> list) {
+			this.list = list;
+		}
+
+		@Override
+		public void accept(Integer t) {
+			list.add(t);
+		}
+
+	}
+
 	private void forEach() {
-		//TODO
+		{
+			final List<Integer> l = new ArrayList<Integer>();
+			final Add add = new Add(l);
+			Stream.of(emptyList).forEach(add);
+			assert l.equals(emptyList);
+		}
+		{
+			final List<Integer> l = new ArrayList<Integer>();
+			final Add add = new Add(l);
+			final List<Integer> expected = Arrays.asList(1, 2, 3);
+			Stream.of(expected).forEach(add);
+			assert l.equals(expected);
+		}
 	}
 
 	private void groupBy() {

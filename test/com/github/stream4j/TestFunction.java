@@ -9,22 +9,22 @@ public class TestFunction {
 			return t * 2;
 		}
 	};
-	
+
 	private final Function<Integer, Integer> plus1 = new Function<Integer, Integer>() {
-		
+
 		@Override
 		public Integer apply(Integer t) {
 			return t + 1;
 		}
 	};
-	
+
 	public void testAll() {
 		apply();
 		andThen();
 		compose();
 		identity();
 	}
-	
+
 	private void apply() {
 		assert x2.apply(2) == 4;
 	}
@@ -38,7 +38,7 @@ public class TestFunction {
 	}
 
 	private void identity() {
-		assert Function.<Integer>identity().apply(1) == 1;
-		assert Function.<String>identity().apply("a").equals("a");
+		assert Function.<Integer> identity().apply(1) == 1;
+		assert Function.<String> identity().apply("a").equals("a");
 	}
 }
