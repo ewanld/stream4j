@@ -122,7 +122,6 @@ public class TestStream {
 		final Set<String> actual = new HashSet<String>(Stream.of(employees).flatMap(getRoles).toList());
 		final HashSet<String> expected = new HashSet<String>(Arrays.asList("role1", "role2", "role3"));
 		assert actual.equals(expected);
-
 	}
 
 	private static class Add extends Consumer<Integer> {
@@ -180,7 +179,13 @@ public class TestStream {
 	}
 
 	private void limit() {
-		//TODO
+		assert Stream.of(emptyList).limit(0).toList().equals(emptyList);
+		assert Stream.of(emptyList).limit(3).toList().equals(emptyList);
+		assert Stream.of(1,2,3).limit(0).toList().equals(emptyList);
+		assert Stream.of(1,2,3).limit(1).toList().equals(Arrays.asList(1));
+		assert Stream.of(1,2,3).limit(2).toList().equals(Arrays.asList(1,2));
+		assert Stream.of(1,2,3).limit(3).toList().equals(Arrays.asList(1,2,3));
+		assert Stream.of(1,2,3).limit(4).toList().equals(Arrays.asList(1,2,3));
 	}
 
 	private void map() {
