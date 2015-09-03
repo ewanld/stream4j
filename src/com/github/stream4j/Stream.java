@@ -312,7 +312,7 @@ public class Stream<T> {
 			final T t = iterator.next();
 			Stream<? extends R> mapped = mapper.apply(t);
 			if (mapped == null) mapped = Stream.of(Collections.<R> emptyList());
-			totalSize = mapped.size == SIZE_UNKNOWN ? SIZE_UNKNOWN : totalSize + mapped.size;
+			totalSize = mapped.size == SIZE_UNKNOWN || totalSize == SIZE_UNKNOWN ? SIZE_UNKNOWN : totalSize + mapped.size;
 			iterators.add(mapped.iterator);
 		}
 		final Iterator<? extends R> compositeIterator = new CompositeIterator<R>(iterators);
