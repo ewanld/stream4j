@@ -1,6 +1,8 @@
 # stream4j
 Simple substitute for package java.util.stream, when working with legacy Java versions (6, 7).
 
+Latest release: v1.0. Ready for production.
+
 ## Quickstart
 ```java
 Function<Integer, String> stringifyInt =/*						@formatter:off*/ new Function<Integer, String>() { @Override public String apply(Integer t)  {
