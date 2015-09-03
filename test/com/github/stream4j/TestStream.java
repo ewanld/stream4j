@@ -3,6 +3,7 @@ package com.github.stream4j;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +17,14 @@ public class TestStream {
 		@Override
 		public boolean test(Integer t) {
 			return t > 2;
+		}
+	};
+
+	private static final Comparator<Integer> intComparator = new Comparator<Integer>() {
+
+		@Override
+		public int compare(Integer o1, Integer o2) {
+			return o1 - o2;
 		}
 	};
 
@@ -181,11 +190,11 @@ public class TestStream {
 	private void limit() {
 		assert Stream.of(emptyList).limit(0).toList().equals(emptyList);
 		assert Stream.of(emptyList).limit(3).toList().equals(emptyList);
-		assert Stream.of(1,2,3).limit(0).toList().equals(emptyList);
-		assert Stream.of(1,2,3).limit(1).toList().equals(Arrays.asList(1));
-		assert Stream.of(1,2,3).limit(2).toList().equals(Arrays.asList(1,2));
-		assert Stream.of(1,2,3).limit(3).toList().equals(Arrays.asList(1,2,3));
-		assert Stream.of(1,2,3).limit(4).toList().equals(Arrays.asList(1,2,3));
+		assert Stream.of(1, 2, 3).limit(0).toList().equals(emptyList);
+		assert Stream.of(1, 2, 3).limit(1).toList().equals(Arrays.asList(1));
+		assert Stream.of(1, 2, 3).limit(2).toList().equals(Arrays.asList(1, 2));
+		assert Stream.of(1, 2, 3).limit(3).toList().equals(Arrays.asList(1, 2, 3));
+		assert Stream.of(1, 2, 3).limit(4).toList().equals(Arrays.asList(1, 2, 3));
 	}
 
 	private static <T> Function<T, String> toStr() {
@@ -197,14 +206,24 @@ public class TestStream {
 			}
 		};
 	}
-	
+
 	private void map() {
 		assert Stream.of(emptyList).map(toStr()).toList().equals(emptyList);
-		assert Stream.of(1,2,3).map(toStr()).toList().equals(Arrays.asList("1", "2", "3"));
+		assert Stream.of(1, 2, 3).map(toStr()).toList().equals(Arrays.asList("1", "2", "3"));
 	}
 
 	private void max() {
-		//TODO
+		assert Stream.of(emptyList).max() == null;
+		assert Stream.of(emptyList).max(intComparator) == null;
+		
+		assert Stream.of(1).max() == 1;
+		assert Stream.of(1).max(intComparator) == 1;
+		
+		assert Stream.of(1,2,3).max() == 3;
+		assert Stream.of(1,2,3).max(intComparator) == 3;
+		
+		assert Stream.of(1,3,2).max() == 3;
+		assert Stream.of(1,3,2).max(intComparator) == 3;
 	}
 
 	private void min() {
