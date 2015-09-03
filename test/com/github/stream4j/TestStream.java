@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class TestStream {
 	private static final List<Integer> emptyList = Collections.<Integer> emptyList();
@@ -46,8 +47,6 @@ public class TestStream {
 		partitionBy();
 		skip();
 		sorted();
-		sorted_withComparator();
-		toList();
 		toMap();
 		toSortedMap();
 	}
@@ -255,39 +254,44 @@ public class TestStream {
 	private void skip() {
 		assert Stream.of(emptyList).skip(0).toList().equals(emptyList);
 		assert Stream.of(emptyList).skip(1).toList().equals(emptyList);
-		assert Stream.of(1,2,3).skip(0).toList().equals(Arrays.asList(1,2,3));
-		assert Stream.of(1,2,3).skip(1).toList().equals(Arrays.asList(2,3));
-		assert Stream.of(1,2,3).skip(4).toList().equals(emptyList);
+		assert Stream.of(1, 2, 3).skip(0).toList().equals(Arrays.asList(1, 2, 3));
+		assert Stream.of(1, 2, 3).skip(1).toList().equals(Arrays.asList(2, 3));
+		assert Stream.of(1, 2, 3).skip(4).toList().equals(emptyList);
 	}
 
 	private void sorted() {
 		assert Stream.of(emptyList).sorted().toList().equals(emptyList);
 		assert Stream.of(emptyList).sorted(intComparator).toList().equals(emptyList);
-		
-		assert Stream.of(1,2,3).sorted().toList().equals(Arrays.asList(1,2,3));
-		assert Stream.of(1,2,3).sorted(intComparator).toList().equals(Arrays.asList(1,2,3));
-		
-		assert Stream.of(3,2,1).sorted().toList().equals(Arrays.asList(1,2,3));
-		assert Stream.of(3,2,1).sorted(intComparator).toList().equals(Arrays.asList(1,2,3));
-		
-		assert Stream.of(3,1,2).sorted().toList().equals(Arrays.asList(1,2,3));
-		assert Stream.of(3,1,2).sorted(intComparator).toList().equals(Arrays.asList(1,2,3));
-	}
 
-	private void sorted_withComparator() {
-		//TODO
-	}
+		assert Stream.of(1, 2, 3).sorted().toList().equals(Arrays.asList(1, 2, 3));
+		assert Stream.of(1, 2, 3).sorted(intComparator).toList().equals(Arrays.asList(1, 2, 3));
 
-	private void toList() {
-		//TODO
+		assert Stream.of(3, 2, 1).sorted().toList().equals(Arrays.asList(1, 2, 3));
+		assert Stream.of(3, 2, 1).sorted(intComparator).toList().equals(Arrays.asList(1, 2, 3));
+
+		assert Stream.of(3, 1, 2).sorted().toList().equals(Arrays.asList(1, 2, 3));
+		assert Stream.of(3, 1, 2).sorted(intComparator).toList().equals(Arrays.asList(1, 2, 3));
 	}
 
 	private void toMap() {
-		//TODO
+		assert Stream.of(emptyList).toMap(toStr()).equals(new HashMap<String, Integer>());
+		
+		final Map<String, Integer> expected = new HashMap<String, Integer>();
+		expected.put("1", 1);
+		expected.put("2", 2);
+		expected.put("3", 3);
+		assert Stream.of(1, 2, 3).toMap(toStr()).equals(expected);
+		
 	}
 
 	private void toSortedMap() {
-		//TODO
+		assert Stream.of(emptyList).toMap(toStr()).equals(new TreeMap<String, Integer>());
+		
+		final Map<String, Integer> expected = new TreeMap<String, Integer>();
+		expected.put("1", 1);
+		expected.put("2", 2);
+		expected.put("3", 3);
+		assert Stream.of(1, 2, 3).toSortedMap(toStr()).equals(expected);
 	}
 
 }
