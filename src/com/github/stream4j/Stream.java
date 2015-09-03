@@ -287,7 +287,7 @@ public class Stream<T> {
 	public T max() {
 		return max(createComparator());
 	}
-	
+
 	/**
 	 * Returns the minimum element of this stream according to the provided Comparator. This is a special case of a
 	 * reduction.<br>
@@ -305,7 +305,7 @@ public class Stream<T> {
 		}
 		return res;
 	}
-	
+
 	/**
 	 * Returns the minimum element of this stream according to the provided Comparator. This is a special case of a
 	 * reduction.<br>
@@ -334,7 +334,8 @@ public class Stream<T> {
 			final T t = iterator.next();
 			Stream<? extends R> mapped = mapper.apply(t);
 			if (mapped == null) mapped = Stream.of(Collections.<R> emptyList());
-			totalSize = mapped.size == SIZE_UNKNOWN || totalSize == SIZE_UNKNOWN ? SIZE_UNKNOWN : totalSize + mapped.size;
+			totalSize = mapped.size == SIZE_UNKNOWN || totalSize == SIZE_UNKNOWN ? SIZE_UNKNOWN : totalSize
+					+ mapped.size;
 			iterators.add(mapped.iterator);
 		}
 		final Iterator<? extends R> compositeIterator = new CompositeIterator<R>(iterators);
