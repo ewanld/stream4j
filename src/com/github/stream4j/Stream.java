@@ -330,7 +330,7 @@ public class Stream<T> {
 		if (size != SIZE_UNKNOWN && size <= maxSize) {
 			return this;
 		} else {
-			long newSize = size == SIZE_UNKNOWN ? SIZE_UNKNOWN : maxSize;
+			final long newSize = size == SIZE_UNKNOWN ? SIZE_UNKNOWN : maxSize;
 			return new Stream<T>(new LimitIterator<T>(iterator, maxSize), newSize);
 		}
 	}
@@ -383,7 +383,7 @@ public class Stream<T> {
 
 			@Override
 			public int compare(T o1, T o2) {
-				@SuppressWarnings("unchecked") Comparable<T> c1 = (Comparable<T>) o1;
+				@SuppressWarnings("unchecked") final Comparable<T> c1 = (Comparable<T>) o1;
 				return c1.compareTo(o2);
 			}
 		};
@@ -391,6 +391,9 @@ public class Stream<T> {
 
 	private static class CompositeIterator<T> implements Iterator<T> {
 		private final List<Iterator<? extends T>> iterators;
+		/**
+		 * Index of the current iterator in the {@code iterators} list.
+		 */
 		private int index = 0;
 
 		public CompositeIterator(List<Iterator<? extends T>> iterators) {
@@ -400,24 +403,21 @@ public class Stream<T> {
 
 		@Override
 		public boolean hasNext() {
-			if (iterators.size() == 0) return false;
-			boolean res = iterators.get(index).hasNext();
-			if (!res && index < iterators.size() - 1) res = iterators.get(++index).hasNext();
-			return res;
+			while (true) {
+				if (index > iterators.size() - 1) {
+					return false;
+				} else if (iterators.get(index).hasNext()) {
+					return true;
+				} else {
+					++index;
+				}
+			}
 		}
 
 		@Override
 		public T next() {
-			if (iterators.size() == 0) throw new NoSuchElementException();
-			while (true) {
-				if (iterators.get(index).hasNext()) {
-					return iterators.get(index).next();
-				} else if (index < iterators.size() - 1) {
-					++index;
-				} else {
-					throw new NoSuchElementException();
-				}
-			}
+			if (!hasNext()) throw new NoSuchElementException();
+			return iterators.get(index).next();
 		}
 
 		@Override
