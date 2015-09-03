@@ -188,8 +188,19 @@ public class TestStream {
 		assert Stream.of(1,2,3).limit(4).toList().equals(Arrays.asList(1,2,3));
 	}
 
+	private static <T> Function<T, String> toStr() {
+		return new Function<T, String>() {
+
+			@Override
+			public String apply(T t) {
+				return t.toString();
+			}
+		};
+	}
+	
 	private void map() {
-		//TODO
+		assert Stream.of(emptyList).map(toStr()).toList().equals(emptyList);
+		assert Stream.of(1,2,3).map(toStr()).toList().equals(Arrays.asList("1", "2", "3"));
 	}
 
 	private void max() {
