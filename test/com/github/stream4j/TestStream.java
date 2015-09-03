@@ -253,7 +253,11 @@ public class TestStream {
 	}
 
 	private void skip() {
-		//TODO
+		assert Stream.of(emptyList).skip(0).toList().equals(emptyList);
+		assert Stream.of(emptyList).skip(1).toList().equals(emptyList);
+		assert Stream.of(1,2,3).skip(0).toList().equals(Arrays.asList(1,2,3));
+		assert Stream.of(1,2,3).skip(1).toList().equals(Arrays.asList(2,3));
+		assert Stream.of(1,2,3).skip(4).toList().equals(emptyList);
 	}
 
 	private void sorted() {
