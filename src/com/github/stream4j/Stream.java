@@ -277,6 +277,13 @@ public class Stream<T> {
 		return res;
 	}
 
+	/**
+	 * Returns the maximum element of this stream according to the provided Comparator. This is a special case of a
+	 * reduction.<br>
+	 * This is a terminal operation.<br>
+	 * The method from the Java Stream API has a different signature:
+	 * {@code Optional<T> max(Comparator<? super T> comparator)}
+	 */
 	public T max() {
 		return max(createComparator());
 	}
@@ -299,6 +306,13 @@ public class Stream<T> {
 		return res;
 	}
 	
+	/**
+	 * Returns the minimum element of this stream according to the provided Comparator. This is a special case of a
+	 * reduction.<br>
+	 * This is a terminal operation.<br>
+	 * The method from the Java Stream API has a different signature:
+	 * {@code Optional<T> max(Comparator<? super T> comparator)}
+	 */
 	public T min() {
 		return min(createComparator());
 	}
