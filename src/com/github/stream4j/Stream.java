@@ -6,12 +6,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * @param <T> the type of the stream elements
@@ -170,6 +174,30 @@ public class Stream<T> {
 		return res;
 	}
 
+	/**
+	 * Not part of the Java Stream API.
+	 */
+	public Set<T> toSet() {
+		final Set<T> res = new HashSet<T>(getCapacityHint());
+		while (iterator.hasNext()) {
+			res.add(iterator.next());
+		}
+		return res;
+	}
+
+	/**
+	 * Returns a sorted set, sorted according to the natural ordering of its elements.
+	 * Not part of the Java Stream API.
+	 * @throws ClassCastException if the type T does not implement {@link Comparable}.
+	 */
+	public SortedSet<T> toSortedSet() {
+		final SortedSet<T> res = new TreeSet<T>();
+		while (iterator.hasNext()) {
+			res.add(iterator.next());
+		}
+		return res;
+	}
+
 	private int getCapacityHint() {
 		return size != SIZE_UNKNOWN ? (int) size : 10;
 	}
@@ -278,11 +306,12 @@ public class Stream<T> {
 	}
 
 	/**
-	 * Returns the maximum element of this stream according to the provided Comparator. This is a special case of a
-	 * reduction.<br>
+	 * Returns the maximum element of this stream according to the natural ordering of its elements. This is a special
+	 * case of a reduction.<br>
 	 * This is a terminal operation.<br>
 	 * The method from the Java Stream API has a different signature:
 	 * {@code Optional<T> max(Comparator<? super T> comparator)}
+	 * @throws ClassCastException if the type T does not implement {@link Comparable}.
 	 */
 	public T max() {
 		return max(createComparator());
@@ -307,11 +336,12 @@ public class Stream<T> {
 	}
 
 	/**
-	 * Returns the minimum element of this stream according to the provided Comparator. This is a special case of a
-	 * reduction.<br>
+	 * Returns the minimum element of this stream according to the natural ordering of its elements. This is a special
+	 * case of a reduction.<br>
 	 * This is a terminal operation.<br>
 	 * The method from the Java Stream API has a different signature:
 	 * {@code Optional<T> max(Comparator<? super T> comparator)}
+	 * @throws ClassCastException if the type T does not implement {@link Comparable}.
 	 */
 	public T min() {
 		return min(createComparator());
@@ -401,6 +431,10 @@ public class Stream<T> {
 		return sorted(createComparator());
 	}
 
+	/**
+	 * Returns a comparator for elements of type T.
+	 * @throws ClassCastException if T does not implement {@link Comparable}.
+	 */
 	private Comparator<T> createComparator() {
 		return new Comparator<T>() {
 

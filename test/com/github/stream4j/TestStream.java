@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class TestStream {
 	private static final List<Integer> emptyList = Collections.<Integer> emptyList();
@@ -49,7 +50,9 @@ public class TestStream {
 		skip();
 		sorted();
 		toMap();
+		toSet();
 		toSortedMap();
+		toSortedSet();
 	}
 
 	private void allMatch() {
@@ -313,6 +316,12 @@ public class TestStream {
 
 	}
 
+	private void toSet() {
+		assert Stream.of(emptyList).toSet().equals(Collections.<Integer> emptySet());
+		assert Stream.of(1, 2, 3).toSet().equals(new HashSet<Integer>(Arrays.asList(1, 2, 3)));
+		assert Stream.of(1, 2, 3, 1).toSet().equals(new HashSet<Integer>(Arrays.asList(3, 2, 1)));
+	}
+
 	private void toSortedMap() {
 		assert Stream.of(emptyList).toMap(toStr()).equals(new TreeMap<String, Integer>());
 
@@ -321,6 +330,12 @@ public class TestStream {
 		expected.put("2", 2);
 		expected.put("3", 3);
 		assert Stream.of(1, 2, 3).toSortedMap(toStr()).equals(expected);
+	}
+
+	private void toSortedSet() {
+		assert Stream.of(emptyList).toSortedSet().equals(new TreeSet<Integer>());
+		assert Stream.of(1, 2, 3).toSortedSet().equals(new TreeSet<Integer>(Arrays.asList(1, 2, 3)));
+		assert Stream.of(1, 2, 3, 1).toSortedSet().equals(new TreeSet<Integer>(Arrays.asList(3, 2, 1)));
 	}
 
 }
