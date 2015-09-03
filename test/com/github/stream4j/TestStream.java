@@ -2,6 +2,7 @@ package com.github.stream4j;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -248,7 +249,35 @@ public class TestStream {
 	}
 
 	private void partitionBy() {
-		//TODO
+		{
+			final Collection<Integer> matched = new ArrayList<Integer>();
+			final Collection<Integer> notMatched = new ArrayList<Integer>();
+			Stream.of(emptyList).partitionBy(gt2, matched, notMatched);
+			assert matched.equals(emptyList);
+			assert notMatched.equals(emptyList);
+		}
+		{
+			final Collection<Integer> matched = new ArrayList<Integer>();
+			final Collection<Integer> notMatched = new ArrayList<Integer>();
+			Stream.of(1, 2, 3).partitionBy(gt2, matched, notMatched);
+			assert matched.equals(Arrays.asList(3));
+			assert notMatched.equals(Arrays.asList(1, 2));
+		}
+		{
+			final Collection<Integer> matched = new ArrayList<Integer>();
+			final Collection<Integer> notMatched = new ArrayList<Integer>();
+			Stream.of(1, 2).partitionBy(gt2, matched, notMatched);
+			assert matched.equals(emptyList);
+			assert notMatched.equals(Arrays.asList(1, 2));
+		}
+		{
+			final Collection<Integer> matched = new ArrayList<Integer>();
+			final Collection<Integer> notMatched = new ArrayList<Integer>();
+			Stream.of(5, 6).partitionBy(gt2, matched, notMatched);
+			assert matched.equals(Arrays.asList(5, 6));
+			assert notMatched.equals(emptyList);
+		}
+
 	}
 
 	private void skip() {
@@ -275,18 +304,18 @@ public class TestStream {
 
 	private void toMap() {
 		assert Stream.of(emptyList).toMap(toStr()).equals(new HashMap<String, Integer>());
-		
+
 		final Map<String, Integer> expected = new HashMap<String, Integer>();
 		expected.put("1", 1);
 		expected.put("2", 2);
 		expected.put("3", 3);
 		assert Stream.of(1, 2, 3).toMap(toStr()).equals(expected);
-		
+
 	}
 
 	private void toSortedMap() {
 		assert Stream.of(emptyList).toMap(toStr()).equals(new TreeMap<String, Integer>());
-		
+
 		final Map<String, Integer> expected = new TreeMap<String, Integer>();
 		expected.put("1", 1);
 		expected.put("2", 2);
