@@ -277,6 +277,10 @@ public class Stream<T> {
 		return res;
 	}
 
+	public T max() {
+		return max(createComparator());
+	}
+	
 	/**
 	 * Returns the minimum element of this stream according to the provided Comparator. This is a special case of a
 	 * reduction.<br>
@@ -293,6 +297,10 @@ public class Stream<T> {
 			}
 		}
 		return res;
+	}
+	
+	public T min() {
+		return min(createComparator());
 	}
 
 	/**
