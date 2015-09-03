@@ -261,7 +261,10 @@ public class TestStream {
 	}
 
 	private void sorted() {
-		//TODO
+		assert Stream.of(emptyList).sorted().toList().equals(emptyList);
+		assert Stream.of(1,2,3).sorted().toList().equals(Arrays.asList(1,2,3));
+		assert Stream.of(3,2,1).sorted().toList().equals(Arrays.asList(1,2,3));
+		assert Stream.of(3,1,2).sorted().toList().equals(Arrays.asList(1,2,3));
 	}
 
 	private void sorted_withComparator() {
