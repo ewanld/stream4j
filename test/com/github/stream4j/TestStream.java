@@ -112,10 +112,14 @@ public class TestStream {
 		final List<String> noRoles = Collections.<String> emptyList();
 		assert Stream.of(noEmployees).flatMap(getRoles).toList().equals(noRoles);
 
-		final Employee emp1 = new Employee("role1", "role2");
-		final Employee emp2 = new Employee("role3");
-		final Employee emp3 = new Employee();
-		final Set<String> actual = new HashSet<String>(Stream.of(emp1, emp2, emp3).flatMap(getRoles).toList());
+		final List<Employee> employees = new ArrayList<Employee>();
+		employees.add(new Employee("role1", "role2"));
+		employees.add(new Employee());
+		employees.add(new Employee());
+		employees.add(new Employee());
+		employees.add(new Employee("role3"));
+		employees.add(new Employee());
+		final Set<String> actual = new HashSet<String>(Stream.of(employees).flatMap(getRoles).toList());
 		final HashSet<String> expected = new HashSet<String>(Arrays.asList("role1", "role2", "role3"));
 		assert actual.equals(expected);
 
