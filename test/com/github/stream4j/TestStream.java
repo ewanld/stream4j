@@ -215,19 +215,29 @@ public class TestStream {
 	private void max() {
 		assert Stream.of(emptyList).max() == null;
 		assert Stream.of(emptyList).max(intComparator) == null;
-		
+
 		assert Stream.of(1).max() == 1;
 		assert Stream.of(1).max(intComparator) == 1;
-		
-		assert Stream.of(1,2,3).max() == 3;
-		assert Stream.of(1,2,3).max(intComparator) == 3;
-		
-		assert Stream.of(1,3,2).max() == 3;
-		assert Stream.of(1,3,2).max(intComparator) == 3;
+
+		assert Stream.of(1, 2, 3).max() == 3;
+		assert Stream.of(1, 2, 3).max(intComparator) == 3;
+
+		assert Stream.of(1, 3, 2).max() == 3;
+		assert Stream.of(1, 3, 2).max(intComparator) == 3;
 	}
 
 	private void min() {
-		//TODO
+		assert Stream.of(emptyList).min() == null;
+		assert Stream.of(emptyList).min(intComparator) == null;
+
+		assert Stream.of(1).min() == 1;
+		assert Stream.of(1).min(intComparator) == 1;
+
+		assert Stream.of(1, 2, 3).min() == 1;
+		assert Stream.of(1, 2, 3).min(intComparator) == 1;
+
+		assert Stream.of(3, 1, 2).min() == 1;
+		assert Stream.of(3, 1, 2).min(intComparator) == 1;
 	}
 
 	private void noneMatch() {
