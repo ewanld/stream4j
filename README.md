@@ -24,7 +24,7 @@ This example uses ```@formatter``` directives used by Eclipse to disable formatt
 ## Examples
 ```java
 Stream.of(3, 2, 1, 4).filter(gt2);  //[3, 4]
-Stream.of(3, 2).allMatch(gt2);      //true
+Stream.of(3, 4).allMatch(gt2);      //true
 Stream.of(3, 2, 1).allMatch(gt2);   //false
 Stream.of(3, 2, 1).anyMatch(gt2);   //true
 Stream.of(3, 2, 1).count();         //3
