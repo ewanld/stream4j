@@ -16,11 +16,6 @@ List<String> l = stream.filter(gt2).map(stringifyInt).toList();
 // l is: ["the number 3", "the number 56"]
 ```
 
-## Code formatting
-The main barrier to writing functional code in Java 6/7 is the extreme verbosity of small anonymous classes. The formatting in the examples above pushes all the cruft to the right side, and keeps the useful part to the left; it enhances readability greatly (once you are used to it), at the expense of writability.
-
-This example uses ```@formatter``` directives used by Eclipse to disable formatting (they must be enabled in the Java formatter settings, tab "Off/on tags"); adapt to your own formatter.
-
 ## Examples
 ```java
 Stream.of(3, 2, 1, 4).filter(gt2);  //[3, 4]
@@ -39,6 +34,5 @@ Execute ```ant``` from the project root directory . A file ```dist/stream4j.jar`
 
 ## Design rationale
 * The design mimics the ```java.util.function``` package, so when you migrate to JDK8 you can switch to this package with ease.
-* This library is fully KISS/YAGNI-compliant.
-* It does not try to be theoretically elegant or full-featured, but focuses on being simple and practical.
+* This library focuses on being simple and practical.
 * The more complex parts of the Stream API, like Collectors for instance, have been left out. Some collectors are implemented directly in the Stream class (check out ```toList```, ```groupBy```, ```partitionBy``` and ```toMap```).
