@@ -35,4 +35,4 @@ Execute ```ant``` from the project root directory . A file ```dist/stream4j.jar`
 ## Design rationale
 * The design mimics the ```java.util.function``` package, so when you migrate to JDK8 you can switch to this package with ease.
 * This library focuses on being simple and practical.
-* The more complex parts of the Stream API, like Collectors for instance, have been left out. Some collectors are implemented directly in the Stream class (check out ```toList```, ```groupBy```, ```partitionBy``` and ```toMap```).
+* A few parts of the Stream API, like Collectors for instance, have been left out. Some collectors are implemented directly in the Stream class (check out ```toList```, ```groupBy```, ```partitionBy``` and ```toMap```).
